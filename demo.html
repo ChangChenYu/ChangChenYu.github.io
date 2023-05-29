@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>匯率轉換計算機</title>
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <script>
+        var xmlString = `<rates>
+                            <USD>0.033</USD>
+                            <EUR>0.03114</EUR>
+                            <JPY>4.7824</JPY>
+                            <KRW>46.64179</KRW>
+                            <AUD>0.05086</AUD>
+                        </rates>`;
+
+        function convertCurrency() {
+            var taiwanAmount = parseFloat(document.getElementById("taiwanAmount").value);
+
+            if (isNaN(taiwanAmount)) {
+                alert("請輸入有效的數值！");
+                resetForm();
+                return;
+            }
+
+            var parser = new DOMParser();
+            var xmlDoc = parser.parseFromString(xmlString, "text/xml");
+            var usdRate = parseFloat(xmlDoc.getElementsByTagName("USD")[0].textContent);
+            var eurRate = parseFloat(xmlDoc.getElementsByTagName("EUR")[0].textContent);
+            var jpyRate = parseFloat(xmlDoc.getElementsByTagName("JPY")[0].textContent);
+            var krwRate = parseFloat(xmlDoc.getElementsByTagName("KRW")[0].textContent);
+            var audRate = parseFloat(xmlDoc.getElementsByTagName("AUD")[0].textContent);
+
+            var usdAmount = (taiwanAmount * usdRate).toFixed(2);
+            var eurAmount = (taiwanAmount * eurRate).toFixed(2);
+            var jpyAmount = (taiwanAmount * jpyRate).toFixed(2);
+            var krwAmount = (taiwanAmount * krwRate).toFixed(2);
+            var audAmount = (taiwanAmount * audRate).toFixed(2);
+
+            document.getElementById("usdAmount").innerHTML = usdAmount + " 美元";
+            document.getElementById("eurAmount").innerHTML = eurAmount + " 歐元";
+            document.getElementById("jpyAmount").innerHTML = jpyAmount + " 日圓";
+            document.getElementById("krwAmount").innerHTML = krwAmount + " 韓元";
+            document.getElementById("audAmount").innerHTML = audAmount + " 澳幣";
+        }
+
+        function resetForm() {
+            document.getElementById("taiwanAmount").value = "";
+            document.getElementById("usdAmount").innerHTML = "";
+            document.getElementById("eurAmount").innerHTML = "";
+            document.getElementById("jpyAmount").innerHTML = "";
+            document.getElementById("krwAmount").innerHTML = "";
+            document.getElementById("audAmount").innerHTML = "";
+        }
+    </script>
+</head>
+<body>
+    <h1>匯率轉換計算機</h1>
+    <p>請輸入台幣金額：</p>
+    <input type="text" id="taiwanAmount">
+    <button onclick="convertCurrency()">執行計算</button>
+
+    <h2>計算結果：</h2>
+    <p id="usdAmount"></p>
+    <p id="eurAmount"></p>
+    <p id="jpyAmount"></p>
+    <p id="krwAmount"></p>
+    <p id="audAmount"></p>
+
+    <button onclick="resetForm()">重新開始</button>
+</body>
+</html>
